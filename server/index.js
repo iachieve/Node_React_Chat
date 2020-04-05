@@ -5,14 +5,14 @@ const cors = require('cors');
 
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
 
-const router = require('./router');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
+app.use(express.static(__dirname + '../client/build'));
+
 app.use(cors());
-app.use(router);
 
 io.on('connect', (socket) => {
   socket.on('join', ({ name, room }, callback) => {
