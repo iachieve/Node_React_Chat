@@ -10,6 +10,9 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
+const router = require('./router');
+app.use(router);
+
 
 app.use(cors());
 
@@ -46,15 +49,5 @@ io.on('connect', (socket) => {
     }
   })
 });
-
-
-if (process.env.NODE_ENV === 'production') {
-  // Serve any static files
-  app.use(express.static(path.join(__dirname, 'client/build')));
-  // Handle React routing, return all requests to React app
-  app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-  });
-}
 
 server.listen(process.env.PORT || 5000, () => console.log(`Server has started.`));
