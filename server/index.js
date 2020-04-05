@@ -10,11 +10,10 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
-app.use(express.static(path.join(__dirname, 'build')));
+// server react project
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client/build')));
 
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
 
 
 app.use(cors());
@@ -51,6 +50,13 @@ io.on('connect', (socket) => {
       io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
     }
   })
+});
+
+
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 
 server.listen(process.env.PORT || 5000, () => console.log(`Server has started.`));
