@@ -10,10 +10,20 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 
-io.on('connection', socket =>{
-  console.log('we have new connection !!!!')
-})
+io.on('connection', socket => {
+  console.log('SERVER MESSAGE: we have new connection !!!!');
+
+  socket.on('join', ({name, room}, callback)=>{
+    console.log(name, ' ', room);
+  
+  });
+
+
+  socket.on('disconnect', () => {
+    console.log('SERVER MESSAGE: User had left !!!')
+  });
+});
 
 
 app.use(router);
-server.listen(PORT, ()=> console.log(`Server has started on ${PORT}`));
+server.listen(PORT, () => console.log(`Server has started on ${PORT}`));
